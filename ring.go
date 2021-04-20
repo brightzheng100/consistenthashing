@@ -146,6 +146,18 @@ func (r *ring) Remove(name string) bool {
 	return true
 }
 
+func (r *ring) GetMembers() []Member {
+	r.RWMutex.Lock()
+	defer r.RWMutex.Unlock()
+
+	members := make([]Member, 0, len(r.memberMap))
+	for _, m := range r.memberMap {
+		members = append(members, *m)
+	}
+
+	return members
+}
+
 func (r *ring) Lookup(key string) Member {
 	var hashKey uint32
 	var hitIndex int
