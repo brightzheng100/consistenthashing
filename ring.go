@@ -22,13 +22,11 @@ type Option func(o *option)
 // ring is the model of how a consistnet hash looks like
 // Within the ring, there are many nodes
 type ring struct {
-	nodes nodes // the logical/virtual "node"s in the ring
-
-	sync.RWMutex
-
-	nodesMap  map[string]*node   // the logical/virtual "node"s by vname -> node
-	memberMap map[string]*Member // the physical "nodes"s by name -> Member
-	options   *option            // the configurable options
+	nodes        nodes              // the logical/virtual "node"s in the ring
+	options      *option            // the configurable options
+	sync.RWMutex                    // the RWMutex to make sure the operations are thread safe
+	nodesMap     map[string]*node   // the logical/virtual "node"s by vname -> node
+	memberMap    map[string]*Member // the physical "nodes"s by name -> Member
 }
 
 // HashFunc is the injectable hashing function

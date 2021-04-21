@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"hash/crc32"
 	"strconv"
 
 	ch "github.com/brightzheng100/consistenthashing"
 )
 
 func main() {
-	ring := ch.NewRing()
+	//ring := ch.NewRing()
+	ring := ch.NewRing(ch.WithHashFunc(crc32.ChecksumIEEE))
 
 	fmt.Println("------- Add nodes -------")
 

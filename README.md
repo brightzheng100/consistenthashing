@@ -1,6 +1,16 @@
 # A simple consistent hashing design and implementation
 
-## The interface defined in `interface.go`
+Consistant hashing is quite common in distributed systems, like `memcached`, to distribute workloads to different worker nodes.
+
+The idea is to assign each joined worker node to a `ring` structure so that the workload can lookup for the near worker node, from a clockwise direction, based on its hash key value.
+
+## The design
+
+From design perspective, we define a struct `Member` to represent a physical machine that joins for consistant hashing.
+
+The `Member` will have the name, network address, weight, hits and some other configurable properties.
+
+And we define 4 key methods to be implemented as the interface.
 
 ```go
 // Member is the physical machine that joins for consistent hashing
@@ -24,6 +34,18 @@ type ConsistantHashing interface {
 	Lookup(key string) Member
 }
 ```
+
+
+## The implementation
+
+The implementation follows a typical `ring` structure, with a configurable hash function as of now.
+Current default hash function is `crc32.ChecksumIEEE`.
+
+Each `Member` has a weight which represents the virtual/logical `node`s distributed to the `ring`.
+I'd recommend to have a proper amount of virtual/logical `node`s as that will lead to a better distribution result.
+
+It's a thread safe implementation.
+
 
 ## The sample & outcome
 
