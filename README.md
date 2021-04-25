@@ -22,8 +22,8 @@ type Member struct {
 	Config map[string]interface{} // extra config if any
 }
 
-// ConsistantHashing defines the interfaces
-type ConsistantHashing interface {
+// ConsistentHashing defines the interfaces
+type ConsistentHashing interface {
 	// Add adds a Member with desired logical/virtual "node"s to the Ring
 	Add(member Member) bool
 	// Remove removes the named Member from the Ring

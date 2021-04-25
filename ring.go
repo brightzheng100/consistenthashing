@@ -8,16 +8,16 @@ import (
 	"sync"
 )
 
-var _ ConsistantHashing = &ring{}
+var _ ConsistentHashing = &ring{}
 
 var (
 	defaultHashFunc = crc32.ChecksumIEEE
 )
 
 type option struct {
-	hashFunc HashFunc
+	hashFunc hashFunc
 }
-type Option func(o *option)
+type optionFunc func(o *option)
 
 // ring is the model of how a consistnet hash looks like
 // Within the ring, there are many nodes
@@ -29,8 +29,8 @@ type ring struct {
 	memberMap    map[string]*Member // the physical "nodes"s by name -> Member
 }
 
-// HashFunc is the injectable hashing function
-type HashFunc func(key []byte) uint32
+// hashFunc is the injectable hashing function
+type hashFunc func(key []byte) uint32
 
 // node is a logical/virtual "node" on the ring.
 // A node must belone to one physical node, or "pnode"
@@ -46,8 +46,8 @@ func (n nodes) Len() int           { return len(n) }
 func (n nodes) Less(i, j int) bool { return n[i].key < n[j].key }
 func (n nodes) Swap(i, j int)      { n[i], n[j] = n[j], n[i] }
 
-// NewRing is to initialize an empty Ring to start with
-func NewRing(opts ...Option) *ring {
+// NewConsistentHashing is to initialize an empty consistent hashing "ring" to start with
+func NewConsistentHashing(opts ...optionFunc) ConsistentHashing {
 	options := &option{
 		hashFunc: defaultHashFunc,
 	}
@@ -63,7 +63,7 @@ func NewRing(opts ...Option) *ring {
 }
 
 // WithHashFunc explicitly sets the hashing func
-func WithHashFunc(hashFunc HashFunc) Option {
+func WithHashFunc(hashFunc hashFunc) optionFunc {
 	return func(o *option) {
 		o.hashFunc = hashFunc
 	}

@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	//ring := ch.NewRing()
-	ring := ch.NewRing(ch.WithHashFunc(crc32.ChecksumIEEE))
+	//ring := ch.NewConsistentHashing()
+	ring := ch.NewConsistentHashing(ch.WithHashFunc(crc32.ChecksumIEEE))
 
 	fmt.Println("------- Add nodes -------")
 
