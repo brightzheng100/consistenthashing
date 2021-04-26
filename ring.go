@@ -81,7 +81,7 @@ func (r *ring) Add(member Member) bool {
 
 	// if the Member with this name exists, return without a need to add
 	if _, ok := r.memberMap[name]; ok {
-		fmt.Printf("The member %s already exists", name)
+		fmt.Printf("The member %s already exists\n", name)
 		return false
 	}
 
@@ -90,7 +90,7 @@ func (r *ring) Add(member Member) bool {
 
 	// iterate to create desired number of vnodes for this node
 	if weight < 1 {
-		weight = 1
+		member.Weight = 1
 	}
 	for i := 0; i < weight; i++ {
 		vname = name + "__" + strconv.Itoa(i)
@@ -109,25 +109,20 @@ func (r *ring) Add(member Member) bool {
 // Remove removes the member by name from the ring
 func (r *ring) Remove(name string) bool {
 	var vname string
-	var weight int
 
 	r.RWMutex.Lock()
 	defer r.RWMutex.Unlock()
 
 	member, ok := r.memberMap[name]
 	if !ok {
-		fmt.Printf("The member %s doesn't exist", name)
+		fmt.Printf("The member %s doesn't exist\n", name)
 		return false
 	}
 	// delete it from the memberMap
 	delete(r.memberMap, name)
 
 	// iterate to remove the logical/virtual "node"s on the ring
-	weight = member.Weight
-	if weight < 1 {
-		weight = 1
-	}
-	for i := 0; i < weight; i++ {
+	for i := 0; i < member.Weight; i++ {
 		vname = name + "__" + strconv.Itoa(i)
 
 		// delete it from the nodeMap
