@@ -79,3 +79,14 @@ node [machine4] serving [192.168.0.4:8080] got [800514] hits
 node [machine1] serving [192.168.0.1:8080] got [901406] hits
 node [machine5] serving [192.168.0.5:8080] got [223119] hits
 ```
+
+## The test
+
+The code has 100% test coverage:
+
+```sh
+$ go test -coverprofile cp.out
+PASS
+coverage: 100.0% of statements
+ok  	github.com/brightzheng100/consistenthashing	2.389s
+```
